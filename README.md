@@ -1,270 +1,349 @@
-# Smart Event Management System - Backend
+# Smart Expense Tracker & Financial Insights Platform
 
-A comprehensive Spring Boot REST API backend for managing events, attendees, and providing intelligent recommendations. This is a production-ready application suitable for portfolio and resume purposes.
+A comprehensive, production-ready Java Spring Boot application for managing personal and shared expenses with advanced analytics and financial insights.
 
-## 🎯 Project Overview
+## Overview
 
-The Smart Event Management System is a full-featured backend application that solves the problem of event discovery, management, and attendee coordination. It provides:
+This project solves the real problem of expense tracking and financial management for individuals and small teams. It provides a complete solution for:
 
-- **Event Management**: Create, update, and manage events
-- **User Management**: User registration and profile management
-- **RSVP System**: Attendee tracking and check-in management
-- **Review & Ratings**: Community feedback on events
-- **Smart Recommendations**: AI-driven event suggestions based on user interests and location
-- **Search & Filter**: Advanced search capabilities across events and users
+- **Individual Expense Tracking**: Record, categorize, and manage personal expenses
+- **Category Management**: Create custom expense categories with visual organization
+- **Financial Analytics**: Monthly summaries, category-wise breakdowns, and spending trends
+- **Shared Expenses**: Split bills and track shared expenses among friends/colleagues
+- **User Authentication**: Secure JWT-based authentication system
+- **RESTful API**: Complete REST API for integration with frontend applications
 
-## 🏗️ Technology Stack
+## Tech Stack
 
-- **Framework**: Spring Boot 3.1.5
-- **Language**: Java 17
-- **ORM**: Hibernate with Spring Data JPA
-- **Database**: MySQL 8.0 (H2 for testing)
-- **Build Tool**: Maven
-- **Additional Libraries**:
-  - Lombok (for reducing boilerplate)
-  - MapStruct (for object mapping)
-  - Validation (Jakarta Bean Validation)
+- **Framework**: Spring Boot 3.2.0
+- **ORM**: Hibernate/JPA with Spring Data JPA
+- **Database**: MySQL 8.0+ (PostgreSQL compatible)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Build Tool**: Maven 3.8+
+- **Testing**: JUnit 5 + Mockito
+- **Code Quality**: Follows Spring Boot best practices and clean code principles
 
-## 📋 Features
+## Architecture
 
-### User Management
-- User registration and profile creation
-- User search and filtering by city
-- Update user profiles
-- Soft delete functionality
+The project follows a layered architecture with clear separation of concerns:
 
-### Event Management
-- Create and manage events
-- Event categorization
-- Search events by title, description, or location
-- Filter by category and city
-- Update event status (UPCOMING, ONGOING, COMPLETED, CANCELLED)
-- Public/Private event settings
+```
+src/main/java/com/expensetracker/
+├── config/           # Spring Security & Application Configuration
+├── controller/       # REST API Endpoints
+├── service/          # Business Logic Layer
+├── repository/       # Data Access Layer (Spring Data JPA)
+├── entity/           # JPA Entity Models
+├── dto/              # Data Transfer Objects
+├── exception/        # Custom Exceptions & Global Exception Handler
+└── util/             # Utility Classes (JWT Provider)
+```
 
-### RSVP & Attendee Management
-- RSVP to events with status (ATTENDING, INTERESTED, NOT_ATTENDING, MAYBE)
-- Track number of guests
-- Check-in functionality with timestamps
-- View attendee lists by status
+## Key Features
 
-### Reviews & Ratings
-- 5-star rating system
-- Write event reviews
-- View event average ratings
-- Mark helpful reviews
-- User review history
+### 1. User Management
+- User registration with email validation
+- Secure password hashing using BCrypt
+- JWT-based authentication
+- User profile management
 
-### Smart Recommendations
-- Personalized event recommendations based on:
-  - User location (city)
-  - User interests
-  - Event ratings and popularity
-- Sorted by relevance and quality
+### 2. Expense Management
+- Create, read, update, and delete expenses
+- Categorize expenses with custom categories
+- Attach tags and descriptions to expenses
+- Recurring expense support (Daily, Weekly, Monthly, Yearly)
+- Pagination and filtering support
 
-## 🚀 Getting Started
+### 3. Analytics & Reports
+- Monthly spending summaries with statistics
+- Category-wise expense breakdown with percentages
+- Spending trends over multiple months
+- Average, minimum, and maximum expense calculations
+- Financial insights for budget planning
+
+### 4. Shared Expenses
+- Create shared expenses and split bills
+- Track expense splits among participants
+- Settlement tracking for shared expenses
+- Bill splitting calculator
+
+### 5. Security
+- JWT-based authentication
+- Password encryption with BCrypt
+- CORS configuration for frontend integration
+- Request validation with Spring Validation
+- Global exception handling with meaningful error messages
+
+## Database Schema
+
+The application uses 5 main entities:
+
+1. **Users**: Stores user account information
+2. **Categories**: User-defined expense categories
+3. **Expenses**: Individual expense records
+4. **ExpenseSplits**: Participants in shared expenses
+5. **SharedExpenses**: Group expenses and shared bills
+
+All relationships are properly defined with foreign keys and cascade rules for data integrity.
+
+## Setup & Installation
 
 ### Prerequisites
+
 - Java 17 or higher
 - Maven 3.8+
-- MySQL 8.0+
+- MySQL 8.0+ or PostgreSQL 12+
+- Git
 
-### Installation
+### Step 1: Clone the Repository
 
-1. **Clone the repository**
 ```bash
 git clone https://github.com/sriramtenneti03/Java-Backend.git
 cd Java-Backend
 ```
 
-2. **Create MySQL Database**
+### Step 2: Database Configuration
+
+Create a MySQL database:
+
 ```sql
-CREATE DATABASE event_management;
+CREATE DATABASE expense_tracker;
 ```
 
-3. **Update Database Configuration**
+### Step 3: Configure Application
+
 Edit `src/main/resources/application.yml`:
+
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/event_management
+    url: jdbc:mysql://localhost:3306/expense_tracker?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password: your_password
 ```
 
-4. **Build the project**
+Alternatively, use environment variables:
+
+```bash
+export SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/expense_tracker
+export SPRING_DATASOURCE_USERNAME=root
+export SPRING_DATASOURCE_PASSWORD=your_password
+```
+
+### Step 4: Build the Project
+
 ```bash
 mvn clean install
 ```
 
-5. **Run the application**
+### Step 5: Run the Application
+
 ```bash
 mvn spring-boot:run
 ```
 
 The application will start on `http://localhost:8080`
 
-## 📡 API Endpoints
+### Step 6: Verify Installation
+
+```bash
+curl http://localhost:8080/api/auth/health
+```
+
+Expected response:
+```json
+{
+  "success": true,
+  "message": "Service is healthy",
+  "data": "OK",
+  "timestamp": 1234567890
+}
+```
+
+## API Endpoints
+
+### Authentication Endpoints
+
+```
+POST   /api/auth/register          - Register new user
+POST   /api/auth/login             - Login user
+GET    /api/auth/health            - Health check
+```
 
 ### User Endpoints
-- `POST /api/users/register` - Register a new user
-- `GET /api/users/{id}` - Get user by ID
-- `GET /api/users/email/{email}` - Get user by email
-- `GET /api/users` - Get all active users
-- `GET /api/users/search?keyword=xyz` - Search users
-- `GET /api/users/city/{city}` - Get users by city
-- `PUT /api/users/{id}` - Update user profile
-- `DELETE /api/users/{id}` - Delete user (soft delete)
 
-### Event Endpoints
-- `POST /api/events` - Create event (requires organizerId)
-- `GET /api/events/{id}` - Get event by ID
-- `GET /api/events/upcoming` - Get upcoming public events
-- `GET /api/events/category/{category}` - Get events by category
-- `GET /api/events/city/{city}` - Get events by city
-- `GET /api/events/organizer/{organizerId}` - Get events by organizer
-- `GET /api/events/search?keyword=xyz` - Search events
-- `GET /api/events/recommendations?userId={id}` - Get personalized recommendations
-- `PUT /api/events/{id}` - Update event
-- `PATCH /api/events/{id}/status?status=COMPLETED` - Update event status
-- `DELETE /api/events/{id}` - Delete event
+```
+GET    /api/users/profile          - Get current user profile
+GET    /api/users/{id}             - Get user by ID
+PUT    /api/users/{id}             - Update user profile
+```
 
-### RSVP/Attendee Endpoints
-- `POST /api/attendees/rsvp` - RSVP to event
-- `DELETE /api/attendees/cancel-rsvp` - Cancel RSVP
-- `GET /api/attendees/event/{eventId}` - Get event attendees
-- `GET /api/attendees/event/{eventId}/status/{status}` - Get attendees by status
-- `GET /api/attendees/user/{userId}` - Get user's attending events
-- `GET /api/attendees/count/{eventId}` - Get attendee count
-- `POST /api/attendees/{attendeeId}/check-in` - Check in attendee
+### Category Endpoints
 
-### Review Endpoints
-- `POST /api/reviews` - Create review
-- `GET /api/reviews/event/{eventId}` - Get event reviews
-- `GET /api/reviews/user/{userId}` - Get user reviews
-- `GET /api/reviews/event/{eventId}/average-rating` - Get event average rating
-- `GET /api/reviews/event/{eventId}/count` - Get review count
-- `PUT /api/reviews/{reviewId}` - Update review
-- `DELETE /api/reviews/{reviewId}` - Delete review
-- `POST /api/reviews/{reviewId}/mark-helpful` - Mark review as helpful
+```
+GET    /api/categories             - Get all user categories
+POST   /api/categories             - Create new category
+GET    /api/categories/{id}        - Get category by ID
+PUT    /api/categories/{id}        - Update category
+DELETE /api/categories/{id}        - Delete category
+```
 
-## 📊 Database Schema
+### Expense Endpoints
 
-### Users Table
-- Stores user information including email, profile, interests
-- Soft delete using `is_active` flag
+```
+GET    /api/expenses               - Get all expenses (paginated)
+POST   /api/expenses               - Create new expense
+GET    /api/expenses/{id}          - Get expense by ID
+PUT    /api/expenses/{id}          - Update expense
+DELETE /api/expenses/{id}          - Delete expense
+POST   /api/expenses/filter        - Get expenses with filters
+GET    /api/expenses/summary/monthly/{yearMonth}  - Get monthly summary
+GET    /api/expenses/analytics/category-breakdown - Get category breakdown
+GET    /api/expenses/analytics/trends             - Get spending trends
+```
 
-### Events Table
-- Event information created by users
-- Supports public/private events
-- Status tracking (UPCOMING, ONGOING, COMPLETED, CANCELLED)
+### Shared Expense Endpoints
 
-### Attendees Table
-- Tracks RSVP status of users to events
-- Check-in functionality
-- Number of guests tracking
-- Unique constraint on (event_id, user_id)
+```
+GET    /api/shared-expenses        - Get all shared expenses
+POST   /api/shared-expenses        - Create shared expense
+GET    /api/shared-expenses/{id}   - Get shared expense by ID
+PUT    /api/shared-expenses/{id}/settle - Mark as settled
+DELETE /api/shared-expenses/{id}   - Delete shared expense
+GET    /api/shared-expenses/unsettled/list - Get unsettled expenses
+```
 
-### Reviews Table
-- Event reviews and ratings
-- Author tracking
-- Helpful count functionality
+## Example API Usage
 
-## 🧪 Testing
+### 1. Register a User
 
-Run tests with:
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "password": "Password123!"
+  }'
+```
+
+### 2. Login
+
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "password": "Password123!"
+  }'
+```
+
+### 3. Create a Category
+
+```bash
+curl -X POST http://localhost:8080/api/categories \
+  -H "Content-Type: application/json" \
+  -H "Authorization: ******" \
+  -d '{
+    "name": "Food",
+    "color": "#FF0000",
+    "icon": "fork-knife"
+  }'
+```
+
+### 4. Create an Expense
+
+```bash
+curl -X POST http://localhost:8080/api/expenses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: ******" \
+  -d '{
+    "description": "Lunch at Restaurant",
+    "amount": 25.50,
+    "expenseDate": "2024-05-29",
+    "categoryId": 1,
+    "tags": "lunch, restaurant"
+  }'
+```
+
+### 5. Get Monthly Summary
+
+```bash
+curl http://localhost:8080/api/expenses/summary/monthly/2024-05 \
+  -H "Authorization: ******"
+```
+
+## Running Tests
+
+### Run all tests
+
 ```bash
 mvn test
 ```
 
-## 📝 Sample Request/Response
+### Run specific test class
 
-### Create User
 ```bash
-curl -X POST http://localhost:8080/api/users/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "fullName": "John Doe",
-    "password": "password123",
-    "city": "New York",
-    "interests": "Technology, Music, Networking"
-  }'
+mvn test -Dtest=UserServiceTest
 ```
 
-### Create Event
+### Run with coverage
+
 ```bash
-curl -X POST "http://localhost:8080/api/events?organizerId=1" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Java Spring Boot Meetup",
-    "description": "Learn Spring Boot best practices",
-    "category": "Technology",
-    "eventDate": "2024-06-15T18:00:00",
-    "location": "Tech Hub, Downtown",
-    "city": "New York",
-    "maxAttendees": 50
-  }'
+mvn test jacoco:report
 ```
 
-## 🔄 Architecture
+## Key Highlights for Resume
 
-```
-com.eventmanagement/
-├── entity/          # JPA entities
-├── dto/            # Data Transfer Objects
-├── repository/     # Spring Data JPA repositories
-├── service/        # Business logic layer
-├── controller/     # REST API controllers
-├── exception/      # Custom exceptions
-└── config/         # Spring configuration
-```
+✅ **Production-Ready Architecture**: Properly layered architecture with separation of concerns
 
-## 🎓 Key Learning Points
-
-This project demonstrates:
-
-1. **Spring Boot Best Practices**
-   - Proper layering (Controller → Service → Repository)
-   - Dependency injection
-   - Transaction management
-
-2. **Hibernate & JPA**
-   - Entity relationships
-   - Custom queries
-   - Database initialization
-
-3. **REST API Design**
-   - Proper HTTP methods and status codes
-   - Request validation
+✅ **Advanced Spring Boot Features**:
+   - Spring Security with JWT authentication
+   - Spring Data JPA with custom queries
    - Global exception handling
-   - DTO pattern
+   - Validation and error handling
 
-4. **Business Logic**
-   - Smart recommendations algorithm
-   - RSVP management
-   - Review aggregation
+✅ **Database Design**:
+   - Relational model with proper normalization
+   - Foreign key constraints and cascade operations
+   - Indexed queries for performance
+   - Flyway migrations for version control
 
-5. **Database Design**
-   - Normalized schema
-   - Proper indexing
-   - Soft delete pattern
+✅ **Advanced Features**:
+   - Analytics and reporting
+   - Pagination and filtering
+   - Recurring expenses
+   - Bill splitting and shared expenses
 
-## 🚀 Future Enhancements
+✅ **Testing**:
+   - Unit tests with Mockito
+   - Integration tests with Spring Boot Test
+   - Repository tests with H2 database
 
-- Authentication & Authorization (JWT)
-- Email notifications
-- Advanced analytics
-- Mobile app support
-- Image upload functionality
-- Event categories and tags
-- Ticketing system
-- Payment integration
-- Real-time notifications using WebSockets
+✅ **Code Quality**:
+   - Clean code principles
+   - SOLID principles
+   - Comprehensive logging
+   - Proper error messages
 
-## 📞 Contact
+✅ **Documentation**:
+   - Complete API documentation
+   - Setup and installation guide
+   - Example API usage
+   - Architecture explanation
 
-For questions or suggestions, feel free to reach out!
+## Conclusion
 
-## 📄 License
+This Smart Expense Tracker application demonstrates a complete, production-ready Spring Boot project that showcases expertise in:
 
-This project is open source and available under the MIT License.
+- Java backend development
+- Spring Boot framework
+- Hibernate and JPA
+- Database design and optimization
+- REST API development
+- User authentication and security
+- Test-driven development
+- Clean code practices
+
+Perfect for showcasing your skills to potential employers!
