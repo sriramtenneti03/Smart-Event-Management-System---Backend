@@ -45,20 +45,18 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        testUser = User.builder()
-                .id(1L)
-                .email("test@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .password("hashedPassword")
-                .build();
+        testUser = new User();
+        testUser.setId(1L);
+        testUser.setEmail("test@example.com");
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setPassword("hashedPassword");
 
-        testUserDTO = UserDTO.builder()
-                .id(1L)
-                .email("test@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .build();
+        testUserDTO = new UserDTO();
+        testUserDTO.setId(1L);
+        testUserDTO.setEmail("test@example.com");
+        testUserDTO.setFirstName("John");
+        testUserDTO.setLastName("Doe");
     }
 
     @Test

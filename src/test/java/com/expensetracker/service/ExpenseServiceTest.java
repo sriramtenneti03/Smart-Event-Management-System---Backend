@@ -54,37 +54,33 @@ class ExpenseServiceTest {
 
     @BeforeEach
     void setUp() {
-        testUser = User.builder()
-                .id(1L)
-                .email("test@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .build();
+        testUser = new User();
+        testUser.setId(1L);
+        testUser.setEmail("test@example.com");
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
 
-        testCategory = Category.builder()
-                .id(1L)
-                .name("Food")
-                .color("#FF0000")
-                .user(testUser)
-                .build();
+        testCategory = new Category();
+        testCategory.setId(1L);
+        testCategory.setName("Food");
+        testCategory.setColor("#FF0000");
+        testCategory.setUser(testUser);
 
-        testExpense = Expense.builder()
-                .id(1L)
-                .description("Lunch")
-                .amount(new BigDecimal("50.00"))
-                .expenseDate(LocalDate.now())
-                .user(testUser)
-                .category(testCategory)
-                .build();
+        testExpense = new Expense();
+        testExpense.setId(1L);
+        testExpense.setDescription("Lunch");
+        testExpense.setAmount(new BigDecimal("50.00"));
+        testExpense.setExpenseDate(LocalDate.now());
+        testExpense.setUser(testUser);
+        testExpense.setCategory(testCategory);
 
-        testExpenseDTO = ExpenseDTO.builder()
-                .id(1L)
-                .description("Lunch")
-                .amount(new BigDecimal("50.00"))
-                .expenseDate(LocalDate.now())
-                .categoryId(1L)
-                .categoryName("Food")
-                .build();
+        testExpenseDTO = new ExpenseDTO();
+        testExpenseDTO.setId(1L);
+        testExpenseDTO.setDescription("Lunch");
+        testExpenseDTO.setAmount(new BigDecimal("50.00"));
+        testExpenseDTO.setExpenseDate(LocalDate.now());
+        testExpenseDTO.setCategoryId(1L);
+        testExpenseDTO.setCategoryName("Food");
     }
 
     @Test

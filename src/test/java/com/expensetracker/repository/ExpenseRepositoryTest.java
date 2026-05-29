@@ -37,28 +37,25 @@ class ExpenseRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testUser = User.builder()
-                .email("test@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .password("password")
-                .build();
+        testUser = new User();
+        testUser.setEmail("test@example.com");
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setPassword("password");
         testUser = userRepository.save(testUser);
 
-        testCategory = Category.builder()
-                .name("Food")
-                .color("#FF0000")
-                .user(testUser)
-                .build();
+        testCategory = new Category();
+        testCategory.setName("Food");
+        testCategory.setColor("#FF0000");
+        testCategory.setUser(testUser);
         testCategory = categoryRepository.save(testCategory);
 
-        testExpense = Expense.builder()
-                .description("Lunch")
-                .amount(new BigDecimal("50.00"))
-                .expenseDate(LocalDate.now())
-                .user(testUser)
-                .category(testCategory)
-                .build();
+        testExpense = new Expense();
+        testExpense.setDescription("Lunch");
+        testExpense.setAmount(new BigDecimal("50.00"));
+        testExpense.setExpenseDate(LocalDate.now());
+        testExpense.setUser(testUser);
+        testExpense.setCategory(testCategory);
         testExpense = expenseRepository.save(testExpense);
     }
 
