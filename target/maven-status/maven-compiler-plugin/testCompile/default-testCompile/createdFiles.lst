@@ -1,0 +1,3 @@
+com/expensetracker/service/ExpenseServiceTest.class
+com/expensetracker/service/UserServiceTest.class
+com/expensetracker/repository/ExpenseRepositoryTest.class
