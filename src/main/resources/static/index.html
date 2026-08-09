@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Expense Tracker</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand">💰 Smart Expense Tracker</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+                <a href="#" onclick="showPage('expenses')">Expenses</a>
+                <a href="#" onclick="showPage('categories')">Categories</a>
+                <a href="#" onclick="showPage('shared')">Shared Expenses</a>
+                <a href="#" onclick="showPage('analytics')">Analytics</a>
+            </div>
+            <div class="nav-auth" id="navAuth">
+                <button onclick="showPage('login')" id="loginBtn">Login</button>
+                <button onclick="showPage('register')" id="registerBtn">Register</button>
+            </div>
+            <div class="nav-user" id="navUser" style="display:none;">
+                <span id="userName"></span>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page">
+            <div class="auth-container">
+                <h2>Login</h2>
+                <form onsubmit="handleLogin(event)">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" onclick="showPage('register')">Register</a></p>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register-page" class="page" style="display:none;">
+            <div class="auth-container">
+                <h2>Register</h2>
+                <form onsubmit="handleRegister(event)">
+                    <input type="text" id="regName" placeholder="Full Name" required>
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <input type="password" id="regPassword" placeholder="Password" required>
+                    <button type="submit">Register</button>
+                </form>
+                <p>Already have an account? <a href="#" onclick="showPage('login')">Login</a></p>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page" style="display:none;">
+            <h1>Dashboard</h1>
+            <div class="dashboard-stats" id="dashboardStats">
+                <div class="stat-card">
+                    <h3>Total Expenses</h3>
+                    <p id="totalExpenses">$0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h3>This Month</h3>
+                    <p id="monthExpenses">$0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Categories</h3>
+                    <p id="totalCategories">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Transactions</h3>
+                    <p id="totalTransactions">0</p>
+                </div>
+            </div>
+            <div class="recent-expenses">
+                <h2>Recent Expenses</h2>
+                <table id="recentExpensesTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Expenses Page -->
+        <div id="expenses-page" class="page" style="display:none;">
+            <h1>Expenses</h1>
+            <button onclick="showAddExpenseModal()" class="btn-primary">+ Add Expense</button>
+            <div class="filters">
+                <input type="date" id="filterStartDate">
+                <input type="date" id="filterEndDate">
+                <select id="filterCategory"><option value="">All Categories</option></select>
+                <button onclick="loadExpenses()">Filter</button>
+            </div>
+            <table id="expensesTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Categories Page -->
+        <div id="categories-page" class="page" style="display:none;">
+            <h1>Categories</h1>
+            <button onclick="showAddCategoryModal()" class="btn-primary">+ Add Category</button>
+            <table id="categoriesTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Icon</th>
+                        <th>Color</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Shared Expenses Page -->
+        <div id="shared-page" class="page" style="display:none;">
+            <h1>Shared Expenses</h1>
+            <button onclick="showAddSharedExpenseModal()" class="btn-primary">+ Create Shared Expense</button>
+            <table id="sharedExpensesTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Total Amount</th>
+                        <th>Your Share</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Analytics Page -->
+        <div id="analytics-page" class="page" style="display:none;">
+            <h1>Analytics</h1>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Expenses by Category</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Monthly Trends</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="expenseModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('expenseModal')">&times;</span>
+                <h2 id="expenseModalTitle">Add Expense</h2>
+                <form onsubmit="handleExpenseSubmit(event)">
+                    <input type="hidden" id="expenseId">
+                    <input type="text" id="expenseDescription" placeholder="Description" required>
+                    <input type="number" id="expenseAmount" placeholder="Amount" step="0.01" required>
+                    <input type="date" id="expenseDate" required>
+                    <select id="expenseCategory" required></select>
+                    <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="categoryModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('categoryModal')">&times;</span>
+                <h2 id="categoryModalTitle">Add Category</h2>
+                <form onsubmit="handleCategorySubmit(event)">
+                    <input type="hidden" id="categoryId">
+                    <input type="text" id="categoryName" placeholder="Category Name" required>
+                    <input type="text" id="categoryIcon" placeholder="Icon (emoji)" value="📁">
+                    <input type="color" id="categoryColor" value="#3498db">
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
