@@ -129,7 +129,7 @@ smart-expense-tracker/
 - CSS3
 - Vanilla JavaScript (ES6+)
 - Chart.js
-
+ 
 ## Configuration
 
 Key configuration in `application.yml`:
