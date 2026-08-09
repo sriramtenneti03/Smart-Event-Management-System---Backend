@@ -1,349 +1,157 @@
-# Smart Expense Tracker & Financial Insights Platform
+# Smart Expense Tracker - Full Stack Web Application
 
-A comprehensive, production-ready Java Spring Boot application for managing personal and shared expenses with advanced analytics and financial insights.
+A comprehensive expense tracking and financial insights platform built with Spring Boot (Backend) and Vanilla JavaScript (Frontend).
 
-## Overview
+## Features
 
-This project solves the real problem of expense tracking and financial management for individuals and small teams. It provides a complete solution for:
+### Backend (Spring Boot)
+- **User Authentication & Authorization** - JWT-based secure authentication
+- **Expense Management** - Create, read, update, delete expenses
+- **Category Management** - Organize expenses with custom categories
+- **Shared Expenses** - Split expenses with friends/family
+- **Financial Analytics** - Visual insights into spending patterns
+- **RESTful API** - Complete API for frontend integration
+- **OpenAPI Documentation** - Interactive API docs at `/swagger-ui.html`
+- **H2 In-Memory Database** - Pre-loaded with sample data for testing
+- **Caching** - Caffeine cache for improved performance
+- **Rate Limiting** - Bucket4j for API protection
+- **Monitoring** - Spring Actuator with Prometheus metrics
 
-- **Individual Expense Tracking**: Record, categorize, and manage personal expenses
-- **Category Management**: Create custom expense categories with visual organization
-- **Financial Analytics**: Monthly summaries, category-wise breakdowns, and spending trends
-- **Shared Expenses**: Split bills and track shared expenses among friends/colleagues
-- **User Authentication**: Secure JWT-based authentication system
-- **RESTful API**: Complete REST API for integration with frontend applications
+### Frontend (Vanilla JS)
+- **Responsive Design** - Works on desktop and mobile
+- **Dashboard** - Overview of expenses and statistics
+- **Expense Tracking** - Full CRUD operations
+- **Category Management** - Custom categories with icons and colors
+- **Analytics Charts** - Visual representation using Chart.js
+- **Single Page Application** - Smooth navigation without page reloads
 
-## Tech Stack
-
-- **Framework**: Spring Boot 3.2.0
-- **ORM**: Hibernate/JPA with Spring Data JPA
-- **Database**: MySQL 8.0+ (PostgreSQL compatible)
-- **Authentication**: JWT (JSON Web Tokens)
-- **Build Tool**: Maven 3.8+
-- **Testing**: JUnit 5 + Mockito
-- **Code Quality**: Follows Spring Boot best practices and clean code principles
-
-## Architecture
-
-The project follows a layered architecture with clear separation of concerns:
-
-```
-src/main/java/com/expensetracker/
-├── config/           # Spring Security & Application Configuration
-├── controller/       # REST API Endpoints
-├── service/          # Business Logic Layer
-├── repository/       # Data Access Layer (Spring Data JPA)
-├── entity/           # JPA Entity Models
-├── dto/              # Data Transfer Objects
-├── exception/        # Custom Exceptions & Global Exception Handler
-└── util/             # Utility Classes (JWT Provider)
-```
-
-## Key Features
-
-### 1. User Management
-- User registration with email validation
-- Secure password hashing using BCrypt
-- JWT-based authentication
-- User profile management
-
-### 2. Expense Management
-- Create, read, update, and delete expenses
-- Categorize expenses with custom categories
-- Attach tags and descriptions to expenses
-- Recurring expense support (Daily, Weekly, Monthly, Yearly)
-- Pagination and filtering support
-
-### 3. Analytics & Reports
-- Monthly spending summaries with statistics
-- Category-wise expense breakdown with percentages
-- Spending trends over multiple months
-- Average, minimum, and maximum expense calculations
-- Financial insights for budget planning
-
-### 4. Shared Expenses
-- Create shared expenses and split bills
-- Track expense splits among participants
-- Settlement tracking for shared expenses
-- Bill splitting calculator
-
-### 5. Security
-- JWT-based authentication
-- Password encryption with BCrypt
-- CORS configuration for frontend integration
-- Request validation with Spring Validation
-- Global exception handling with meaningful error messages
-
-## Database Schema
-
-The application uses 5 main entities:
-
-1. **Users**: Stores user account information
-2. **Categories**: User-defined expense categories
-3. **Expenses**: Individual expense records
-4. **ExpenseSplits**: Participants in shared expenses
-5. **SharedExpenses**: Group expenses and shared bills
-
-All relationships are properly defined with foreign keys and cascade rules for data integrity.
-
-## Setup & Installation
+## Quick Start
 
 ### Prerequisites
+- Java 17+
+- Maven 3.6+
 
-- Java 17 or higher
-- Maven 3.8+
-- MySQL 8.0+ or PostgreSQL 12+
-- Git
-
-### Step 1: Clone the Repository
+### Running the Application
 
 ```bash
-git clone https://github.com/sriramtenneti03/Java-Backend.git
-cd Java-Backend
+# Build and run
+mvn clean spring-boot:run
+
+# Or build JAR and run
+mvn clean package
+java -jar target/smart-expense-tracker-1.0.0.jar
 ```
 
-### Step 2: Database Configuration
+### Access the Application
 
-Create a MySQL database:
+- **Frontend**: http://localhost:8080
+- **API Documentation**: http://localhost:8080/swagger-ui.html
+- **H2 Console**: http://localhost:8080/h2-console
+  - JDBC URL: `jdbc:h2:mem:expensedb`
+  - Username: `sa`
+  - Password: (empty)
 
-```sql
-CREATE DATABASE expense_tracker;
-```
+### Test Credentials
 
-### Step 3: Configure Application
+The application comes pre-loaded with test users:
 
-Edit `src/main/resources/application.yml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/expense_tracker?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: root
-    password: your_password
-```
-
-Alternatively, use environment variables:
-
-```bash
-export SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/expense_tracker
-export SPRING_DATASOURCE_USERNAME=root
-export SPRING_DATASOURCE_PASSWORD=your_password
-```
-
-### Step 4: Build the Project
-
-```bash
-mvn clean install
-```
-
-### Step 5: Run the Application
-
-```bash
-mvn spring-boot:run
-```
-
-The application will start on `http://localhost:8080`
-
-### Step 6: Verify Installation
-
-```bash
-curl http://localhost:8080/api/auth/health
-```
-
-Expected response:
-```json
-{
-  "success": true,
-  "message": "Service is healthy",
-  "data": "OK",
-  "timestamp": 1234567890
-}
-```
+| Email | Password |
+|-------|----------|
+| john@example.com | password123 |
+| jane@example.com | password123 |
 
 ## API Endpoints
 
-### Authentication Endpoints
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+
+### Expenses
+- `GET /api/expenses` - Get all expenses
+- `GET /api/expenses/{id}` - Get expense by ID
+- `POST /api/expenses` - Create expense
+- `PUT /api/expenses/{id}` - Update expense
+- `DELETE /api/expenses/{id}` - Delete expense
+
+### Categories
+- `GET /api/categories` - Get all categories
+- `GET /api/categories/{id}` - Get category by ID
+- `POST /api/categories` - Create category
+- `PUT /api/categories/{id}` - Update category
+- `DELETE /api/categories/{id}` - Delete category
+
+### Shared Expenses
+- `GET /api/shared-expenses` - Get shared expenses
+- `POST /api/shared-expenses` - Create shared expense
+
+### Users
+- `GET /api/users/profile` - Get current user profile
+- `PUT /api/users/profile` - Update profile
+- `DELETE /api/users/profile` - Delete account
+
+## Project Structure
 
 ```
-POST   /api/auth/register          - Register new user
-POST   /api/auth/login             - Login user
-GET    /api/auth/health            - Health check
+smart-expense-tracker/
+├── src/main/java/com/expensetracker/
+│   ├── config/          # Configuration classes
+│   ├── controller/      # REST controllers
+│   ├── dto/            # Data Transfer Objects
+│   ├── entity/         # JPA Entities
+│   ├── exception/      # Exception handling
+│   ├── repository/     # Data repositories
+│   ├── service/        # Business logic
+│   └── util/           # Utility classes
+├── src/main/resources/
+│   ├── static/         # Frontend files
+│   │   ├── css/        # Stylesheets
+│   │   ├── js/         # JavaScript files
+│   │   └── index.html  # Main HTML file
+│   └── application.yml # Application configuration
+└── pom.xml            # Maven dependencies
 ```
 
-### User Endpoints
+## Technologies Used
 
-```
-GET    /api/users/profile          - Get current user profile
-GET    /api/users/{id}             - Get user by ID
-PUT    /api/users/{id}             - Update user profile
-```
+### Backend
+- Spring Boot 3.2.0
+- Spring Security + JWT
+- Spring Data JPA
+- H2 Database
+- ModelMapper
+- OpenAPI/Swagger
+- Bucket4j (Rate Limiting)
+- Caffeine (Caching)
+- Spring Actuator
 
-### Category Endpoints
+### Frontend
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6+)
+- Chart.js
 
-```
-GET    /api/categories             - Get all user categories
-POST   /api/categories             - Create new category
-GET    /api/categories/{id}        - Get category by ID
-PUT    /api/categories/{id}        - Update category
-DELETE /api/categories/{id}        - Delete category
-```
+## Configuration
 
-### Expense Endpoints
+Key configuration in `application.yml`:
+- Database: H2 in-memory (for testing)
+- JWT secret: Configurable via environment variable
+- Server port: 8080
+- CORS: Enabled for all origins
 
-```
-GET    /api/expenses               - Get all expenses (paginated)
-POST   /api/expenses               - Create new expense
-GET    /api/expenses/{id}          - Get expense by ID
-PUT    /api/expenses/{id}          - Update expense
-DELETE /api/expenses/{id}          - Delete expense
-POST   /api/expenses/filter        - Get expenses with filters
-GET    /api/expenses/summary/monthly/{yearMonth}  - Get monthly summary
-GET    /api/expenses/analytics/category-breakdown - Get category breakdown
-GET    /api/expenses/analytics/trends             - Get spending trends
-```
+## Development
 
-### Shared Expense Endpoints
-
-```
-GET    /api/shared-expenses        - Get all shared expenses
-POST   /api/shared-expenses        - Create shared expense
-GET    /api/shared-expenses/{id}   - Get shared expense by ID
-PUT    /api/shared-expenses/{id}/settle - Mark as settled
-DELETE /api/shared-expenses/{id}   - Delete shared expense
-GET    /api/shared-expenses/unsettled/list - Get unsettled expenses
-```
-
-## Example API Usage
-
-### 1. Register a User
+### Building for Production
 
 ```bash
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "firstName": "John",
-    "lastName": "Doe",
-    "password": "Password123!"
-  }'
+mvn clean package -DskipTests
 ```
 
-### 2. Login
-
-```bash
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "password": "Password123!"
-  }'
-```
-
-### 3. Create a Category
-
-```bash
-curl -X POST http://localhost:8080/api/categories \
-  -H "Content-Type: application/json" \
-  -H "Authorization: ******" \
-  -d '{
-    "name": "Food",
-    "color": "#FF0000",
-    "icon": "fork-knife"
-  }'
-```
-
-### 4. Create an Expense
-
-```bash
-curl -X POST http://localhost:8080/api/expenses \
-  -H "Content-Type: application/json" \
-  -H "Authorization: ******" \
-  -d '{
-    "description": "Lunch at Restaurant",
-    "amount": 25.50,
-    "expenseDate": "2024-05-29",
-    "categoryId": 1,
-    "tags": "lunch, restaurant"
-  }'
-```
-
-### 5. Get Monthly Summary
-
-```bash
-curl http://localhost:8080/api/expenses/summary/monthly/2024-05 \
-  -H "Authorization: ******"
-```
-
-## Running Tests
-
-### Run all tests
+### Running Tests
 
 ```bash
 mvn test
 ```
 
-### Run specific test class
+## License
 
-```bash
-mvn test -Dtest=UserServiceTest
-```
-
-### Run with coverage
-
-```bash
-mvn test jacoco:report
-```
-
-## Key Highlights for Resume
-
-✅ **Production-Ready Architecture**: Properly layered architecture with separation of concerns
-
-✅ **Advanced Spring Boot Features**:
-   - Spring Security with JWT authentication
-   - Spring Data JPA with custom queries
-   - Global exception handling
-   - Validation and error handling
-
-✅ **Database Design**:
-   - Relational model with proper normalization
-   - Foreign key constraints and cascade operations
-   - Indexed queries for performance
-   - Flyway migrations for version control
-
-✅ **Advanced Features**:
-   - Analytics and reporting
-   - Pagination and filtering
-   - Recurring expenses
-   - Bill splitting and shared expenses
-
-✅ **Testing**:
-   - Unit tests with Mockito
-   - Integration tests with Spring Boot Test
-   - Repository tests with H2 database
-
-✅ **Code Quality**:
-   - Clean code principles
-   - SOLID principles
-   - Comprehensive logging
-   - Proper error messages
-
-✅ **Documentation**:
-   - Complete API documentation
-   - Setup and installation guide
-   - Example API usage
-   - Architecture explanation
-
-## Conclusion
-
-This Smart Expense Tracker application demonstrates a complete, production-ready Spring Boot project that showcases expertise in:
-
-- Java backend development
-- Spring Boot framework
-- Hibernate and JPA
-- Database design and optimization
-- REST API development
-- User authentication and security
-- Test-driven development
-- Clean code practices
-
-Perfect for showcasing your skills to potential employers!
+MIT License
